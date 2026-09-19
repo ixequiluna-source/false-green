@@ -44,4 +44,6 @@ Consulta [API](docs/API.md), [arquitectura](docs/ARCHITECTURE.md), [verificació
 
 ## Verificación del 19 de septiembre de 2026
 
+CI remota aprobada en Ubuntu con Node 22 y 24, incluida la suite HTTP. [Ejecución verificada, intento 2](https://github.com/ixequiluna-source/false-green/actions/runs/35465080383/attempts/2). El bloqueo inicial de facturación quedó resuelto antes de esta ejecución.
+
 Instalación limpia con lockfile: 71 pruebas unitarias, 18 de navegador offline y 20 HTTP aprobadas en Windows con Node 24.15.0 y las versiones fijadas. Demo: cinco supervivientes y cinco detecciones. [Detalle y límites](docs/VERIFICATION-2026-09-19.md).

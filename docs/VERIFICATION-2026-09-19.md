@@ -27,4 +27,6 @@ Added a real dependency lock and changed CI to `npm ci`. Retained Ixequi Luna as
 
 ## Release boundary
 
-Local validation is complete for the scenarios above. Remote repository creation, hosted CI and any release publication must be verified separately. No npm package publication, real targets, production payments or customer data are involved.
+Published publicly at https://github.com/ixequiluna-source/false-green. Initial full source commit: 808e5944b28ef46e4d563baf7ebf196ffccc02f4. Both author and committer are Dr. Ixequi Luna; no coauthor trailers. GitHub Actions run 35465080383 initially could not start because of an account billing lock. After the owner resolved billing, attempt 2 completed successfully on Ubuntu with Node 22 and 24, including build, unit, offline browser, demo contract and HTTP integration steps. Evidence: https://github.com/ixequiluna-source/false-green/actions/runs/35465080383/attempts/2. No paid setting was changed by this work.
+
+Local validation is complete for the scenarios above. Public repository creation and hosted CI are verified above; no tagged release has been published. No npm package publication, real targets, production payments or customer data are involved.

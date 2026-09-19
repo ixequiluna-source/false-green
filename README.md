@@ -46,6 +46,8 @@ The demo script succeeds only after asserting exactly **5 survivors + 5 detectio
 
 ## Reproduced locally on September 19, 2026
 
+Hosted CI passed on Ubuntu with Node 22 and 24, including the HTTP suite. [Verified run, attempt 2](https://github.com/ixequiluna-source/false-green/actions/runs/35465080383/attempts/2). The initial account billing block was resolved before this successful execution.
+
 Clean registry installation with the committed lockfile: **71 unit + 18 offline browser + 20 HTTP integration tests passed** on Windows with Node 24.15.0, Playwright Core 1.56.1 and its Chromium 141.0.7390.37. The synthetic demo reproduced five survivors and five detections. This is local evidence, not a hosted CI result or a guarantee about other applications. See [verification details](docs/VERIFICATION-2026-09-19.md).
 
 ## What exists today

@@ -1,0 +1,42 @@
+name: verify
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install declared dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Install Chromium and OS dependencies
+        run: npx playwright-core install --with-deps chromium
+      - name: Build, unit checks, offline browser checks, demo contract
+        run: npm run verify
+      - name: HTTP and network integration
+        run: npm run test:http
+      - name: Preserve synthetic demo evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: false-green-demo-node-${{ matrix.node }}
+          path: false-green-report/
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.test-build/
+false-green-report/
+artifacts/
+*.tgz
+.env
+.env.*
+!.env.example
+.DS_Store

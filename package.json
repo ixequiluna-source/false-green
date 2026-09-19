@@ -1,0 +1,53 @@
+{
+  "name": "false-green",
+  "version": "0.1.0-alpha.1",
+  "private": true,
+  "description": "Break the product. Challenge the green. Evidence-aware browser fault testing.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Ixequi Luna",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "false-green": "dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test:unit": "tsc -p tsconfig.test.json && node --test .test-build/tests/unit.test.js",
+    "test:browser": "tsc -p tsconfig.test.json && node --test .test-build/tests/browser.test.js",
+    "test": "npm run test:unit && npm run test:browser",
+    "demo": "npm run build && node scripts/demo.mjs",
+    "verify": "npm run build && npm test && npm run demo",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "prepack": "npm run build",
+    "test:http": "tsc -p tsconfig.test.json && node --test .test-build/tests/http.test.js"
+  },
+  "dependencies": {
+    "playwright-core": "1.56.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.0.4",
+    "typescript": "5.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ixequiluna-source/false-green.git"
+  },
+  "keywords": [
+    "playwright",
+    "mutation-testing",
+    "fault-injection",
+    "testing",
+    "negative-controls",
+    "typescript"
+  ]
+}

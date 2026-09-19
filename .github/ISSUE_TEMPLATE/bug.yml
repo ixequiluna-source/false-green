@@ -1,0 +1,23 @@
+name: Reproducible bug
+description: A synthetic reproduction of incorrect behavior or misleading interpretation.
+title: "[bug] "
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Paste synthetic fixture code. No client data, credentials or private URLs.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual verdicts
+    validations:
+      required: true
+  - type: textarea
+    id: versions
+    attributes:
+      label: Node, Playwright, Chromium and operating-system versions
+    validations:
+      required: true

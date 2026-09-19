@@ -1,0 +1,82 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { defineSuite, validateMutation, isLoopback } from '../src/config.js';
+import { check, eventually, isAssertionFailure } from '../src/assertions.js';
+import { classify, cleanBaseline, summarize } from '../src/verdict.js';
+import { renderHtml, renderMarkdown, escapeHtml, writeReport } from '../src/report.js';
+import { matchesRequest } from '../src/injector.js';
+import { main } from '../src/cli.js';
+import { suite, trial, result, report, scenario, fault } from './helpers.js';
+import type { Mutation, Suite } from '../src/types.js';
+
+test('defaults use two repetitions, exact local origin and a bounded timeout', () => {
+  const s = defineSuite(suite()); assert.equal(s.repetitions, 2); assert.equal(s.timeoutMs, 10000); assert.deepEqual(s.allowedOrigins, ['http://127.0.0.1:4177']);
+});
+for (const baseURL of ['https://example.com','https://localhost.evil.test','http://127.0.0.1.evil.test','file:///tmp/app','ftp://127.0.0.1','http://user:password@localhost']) {
+  test(`reject unsafe baseURL ${baseURL}`, () => assert.throws(() => defineSuite(suite({baseURL}))));
+}
+test('explicit remote opt-in permits a named authorized origin', () => assert.equal(defineSuite(suite({baseURL:'https://staging.example.test',allowRemoteTargets:true})).allowedOrigins[0], 'https://staging.example.test'));
+test('origin allowlist must include baseURL origin', () => assert.throws(() => defineSuite(suite({allowedOrigins:['http://localhost:4000']}))));
+test('origin entries cannot contain paths', () => assert.throws(() => defineSuite(suite({allowedOrigins:['http://127.0.0.1:4177/path']}))));
+test('empty origin list is rejected', () => assert.throws(() => defineSuite(suite({allowedOrigins:[]}))));
+test('loopback matching is exact and includes IPv6', () => { assert.ok(isLoopback('[::1]')); assert.ok(isLoopback('localhost')); assert.equal(isLoopback('0.0.0.0'),false); });
+for (const repetitions of [0,1,11,2.5,NaN]) test(`reject invalid repetitions ${repetitions}`, () => assert.throws(() => defineSuite(suite({repetitions}))));
+for (const timeoutMs of [0,99,300001,Infinity]) test(`reject invalid timeout ${timeoutMs}`, () => assert.throws(() => defineSuite(suite({timeoutMs}))));
+test('no scenarios is not a green campaign', () => assert.throws(() => defineSuite(suite({scenarios:[]}))));
+test('duplicate scenario IDs are rejected', () => assert.throws(() => defineSuite(suite({scenarios:[scenario,scenario]}))));
+test('duplicate mutation IDs are rejected', () => assert.throws(() => defineSuite(suite({scenarios:[{...scenario,mutations:[fault,fault]}]}))));
+test('missing verification is rejected at the boundary', () => assert.throws(() => defineSuite({name:'x',baseURL:'http://localhost',scenarios:[{...scenario,verify:null}]} as unknown as Suite)));
+test('mutation with missing selector is invalid, not a silent no-op', () => assert.throws(() => validateMutation({id:'x',title:'x',kind:'block-click'} as Mutation)));
+test('unknown operator is rejected', () => assert.throws(() => validateMutation({id:'x',title:'x',kind:'magic'} as unknown as Mutation)));
+test('network mutation with missing path is rejected', () => assert.throws(() => validateMutation({id:'x',title:'x',kind:'route-abort'} as Mutation)));
+for (const path of ['cart','//evil.test','/cart?token=x','/cart#x','/cart*']) test(`reject ambiguous network path ${path}`, () => assert.throws(() => validateMutation({id:'x',title:'x',kind:'route-abort',path})));
+test('204 cannot contain a body', () => assert.throws(() => validateMutation({id:'x',title:'x',kind:'route-response',path:'/x',status:204,body:'data'})));
+test('network method is matched, query is deliberately ignored', () => {
+  const m: Mutation = {id:'x',title:'x',kind:'route-abort',path:'/cart',method:'POST'};
+  assert.ok(matchesRequest(m,new URL('http://localhost/cart?q=1'),'POST'));
+  assert.equal(matchesRequest(m,new URL('http://localhost/cart'),'GET'),false);
+  assert.equal(matchesRequest(m,new URL('http://localhost/cart/'),'POST'),false);
+});
+test('baseline requires repeated clean success with zero injection hits', () => {
+  assert.ok(cleanBaseline([trial({hits:0}),trial({hits:0})]));
+  assert.equal(cleanBaseline([trial({hits:0})]),false); assert.equal(cleanBaseline([trial(),trial()]),false);
+});
+test('baseline failures invalidate even apparent detections', () => assert.equal(classify([trial({outcome:'assertion-failed',phase:'verify'}),trial({outcome:'assertion-failed',phase:'verify'})],false).verdict,'baseline-invalid'));
+test('a single repetition never establishes a survivor', () => assert.equal(classify([trial()],true).verdict,'inconclusive'));
+test('applied fault plus repeated passed verification is a survivor', () => assert.equal(classify([trial(),trial()],true).verdict,'survived'));
+test('consistent verify assertions after hits are detections', () => assert.equal(classify([trial({outcome:'assertion-failed',phase:'verify'}),trial({outcome:'assertion-failed',phase:'verify'})],true).verdict,'detected'));
+test('zero hits are unexercised, never killed or survived', () => assert.equal(classify([trial({hits:0}),trial({hits:0})],true).verdict,'not-exercised'));
+test('a timeout is not a detection', () => assert.equal(classify([trial({outcome:'timeout'}),trial({outcome:'timeout'})],true).verdict,'inconclusive'));
+test('infrastructure errors do not count as kills', () => assert.equal(classify([trial({outcome:'error'}),trial({outcome:'error'})],true).verdict,'inconclusive'));
+test('injector errors invalidate observed hits', () => assert.equal(classify([trial({injectionErrors:['bad selector']}),trial()],true).verdict,'inconclusive'));
+test('blocked unapproved traffic invalidates the experiment', () => assert.equal(classify([trial({blockedRequests:1}),trial()],true).verdict,'inconclusive'));
+test('mixed verification outcomes are unstable', () => assert.equal(classify([trial(),trial({outcome:'assertion-failed',phase:'verify'})],true).verdict,'unstable'));
+test('mixed fault activation is unstable', () => assert.equal(classify([trial(),trial({hits:0})],true).verdict,'unstable'));
+test('zero denominator is null, never 100%', () => { const s=summarize([result('not-exercised')]);assert.equal(s.detectionRate,null);assert.equal(s.exitCode,2); });
+test('unresolved faults never improve a score', () => { const s=summarize([result('detected'),result('survived'),result('inconclusive')]);assert.equal(s.detectionRate,50);assert.equal(s.eligible,2);assert.equal(s.exitCode,2); });
+test('all detected yields exit 0', () => assert.equal(summarize([result('detected')]).exitCode,0));
+test('stable survivors yield exit 1', () => assert.equal(summarize([result('survived')]).exitCode,1));
+test('empty campaigns cannot succeed', () => assert.equal(summarize([]).exitCode,2));
+test('check creates a native assertion error', () => {assert.throws(()=>check(false,'contract'),isAssertionFailure); check(true,'fine');assert.equal(isAssertionFailure(new Error('crash')),false);});
+test('eventually retries a predicate until success', async () => {let n=0;await eventually(()=>++n===3,'eventually',{timeoutMs:100,intervalMs:1});assert.equal(n,3);});
+test('eventually expiry is an assertion, not a journey timeout', async () => assert.rejects(eventually(()=>false,'contract',{timeoutMs:10,intervalMs:1}),isAssertionFailure));
+test('eventually propagates predicate errors as non-assertions', async () => assert.rejects(eventually(()=>{throw new TypeError('bad page');},'contract'),TypeError));
+test('eventually honors cancellation', async () => {const c=new AbortController();c.abort();await assert.rejects(eventually(()=>false,'contract',{signal:c.signal}));});
+test('eventually rejects invalid timing', async () => assert.rejects(eventually(()=>true,'contract',{timeoutMs:0}),TypeError));
+test('HTML escapes all unsafe characters', () => assert.equal(escapeHtml('<script x="\'">&'),'&lt;script x=&quot;&#39;&quot;&gt;&amp;'));
+test('HTML report cannot embed user titles as markup', () => {const r=report();r.suite='<script>alert(1)</script>';const html=renderHtml(r);assert.equal(html.includes('<script>'),false);assert.ok(html.includes('&lt;script&gt;'));assert.ok(html.includes("default-src 'none'"));});
+test('HTML report is standalone and shows eligibility', () => {const html=renderHtml(report());assert.equal(html.includes('<script'),false);assert.equal(html.includes('<link'),false);assert.ok(html.includes('(1/1)'));});
+test('Markdown report contains evidence and a bounded claim', () => {const s=renderMarkdown(report());assert.ok(s.includes('survived'));assert.ok(s.includes('not proof of product correctness'));});
+test('JSON, HTML and Markdown reports round-trip on disk', async () => {const dir=await mkdtemp(join(tmpdir(),'fg-test-'));try{await writeReport(report(),dir);assert.deepEqual(JSON.parse(await readFile(join(dir,'report.json'),'utf8')),report());assert.ok((await readFile(join(dir,'index.html'),'utf8')).startsWith('<!doctype'));}finally{await rm(dir,{recursive:true,force:true});}});
+test('CLI missing suite returns 2', async () => assert.equal(await main([]),2));
+test('CLI rejects unknown flags', async () => assert.equal(await main(['--silent-success']),2));
+test('CLI help returns 0 without launching a browser', async () => assert.equal(await main(['--help']),0));
+test('CLI version returns 0 without launching a browser', async () => assert.equal(await main(['--version']),0));
+
+test('offline HTML fixtures permit about:blank and no network origins',()=>{const s=defineSuite(suite({baseURL:'about:blank',html:'<p>hello</p>'}));assert.deepEqual(s.allowedOrigins,[]);});
+test('offline fixture cannot enable an HTTP origin',()=>assert.throws(()=>defineSuite(suite({baseURL:'about:blank',html:'<p>x</p>',allowedOrigins:['http://localhost']}))));
+test('offline fixture rejects URL-path network faults',()=>assert.throws(()=>defineSuite(suite({baseURL:'about:blank',html:'<p>x</p>',scenarios:[{...scenario,mutations:[{id:'api',title:'API',kind:'route-abort',path:'/api'}]}]}))));
+test('image operator needs exactly one selector or path',()=>{assert.throws(()=>validateMutation({id:'img',title:'Image',kind:'break-image'} as Mutation));assert.doesNotThrow(()=>validateMutation({id:'img',title:'Image',kind:'break-image',selector:'img'}));});

@@ -1,0 +1,7 @@
+import type { Mutation, Scenario, ScenarioResult, Suite, Trial, Verdict, Report } from '../src/types.js';
+export const fault: Mutation = { id: 'broken', title: 'Broken', kind: 'block-click', selector: '#button' };
+export const scenario: Scenario = { id: 'sample', title: 'Sample', exercise: async () => {}, verify: async () => {}, mutations: [fault] };
+export const suite = (overrides: Partial<Suite> = {}): Suite => ({ name: 'Test', baseURL: 'http://127.0.0.1:4177', scenarios: [scenario], ...overrides });
+export const trial = (overrides: Partial<Trial> = {}): Trial => ({ outcome: 'passed', phase: 'complete', hits: 1, durationMs: 1, message: null, blockedRequests: 0, injectionErrors: [], ...overrides });
+export const result = (verdict: Verdict, valid = true): ScenarioResult => ({ id: 'sample', title: 'Sample', baselineBefore: [], baselineAfter: [], baselineValid: valid, mutations: [{ id: 'broken', title: 'Broken', kind: 'block-click', verdict, reason: 'A reason', trials: [trial(),trial()] }] });
+export const report = (): Report => ({schemaVersion:1,toolVersion:'0.1.0-alpha.1',suite:'Test',createdAt:'2026-09-18T00:00:00.000Z',durationMs:100,environment:{node:'v22',platform:'linux',browser:'144',playwright:'1.56.1'},repetitions:2,suiteFileSha256:null,scenarios:[result('survived')],summary:{total:1,detected:0,survived:1,unexercised:0,unresolved:0,eligible:1,detectionRate:0,exitCode:1}});

@@ -1,0 +1,635 @@
+
+> false-green@0.1.0-alpha.1 verify
+> npm run build && npm test && npm run demo
+
+
+> false-green@0.1.0-alpha.1 build
+> tsc -p tsconfig.json
+
+
+> false-green@0.1.0-alpha.1 test
+> npm run test:unit && npm run test:browser
+
+
+> false-green@0.1.0-alpha.1 test:unit
+> tsc -p tsconfig.test.json && node --test .test-build/tests/unit.test.js
+
+TAP version 13
+# Subtest: defaults use two repetitions, exact local origin and a bounded timeout
+ok 1 - defaults use two repetitions, exact local origin and a bounded timeout
+  ---
+  duration_ms: 10.929345
+  type: 'test'
+  ...
+# Subtest: reject unsafe baseURL https://example.com
+ok 2 - reject unsafe baseURL https://example.com
+  ---
+  duration_ms: 0.562672
+  type: 'test'
+  ...
+# Subtest: reject unsafe baseURL https://localhost.evil.test
+ok 3 - reject unsafe baseURL https://localhost.evil.test
+  ---
+  duration_ms: 0.132919
+  type: 'test'
+  ...
+# Subtest: reject unsafe baseURL http://127.0.0.1.evil.test
+ok 4 - reject unsafe baseURL http://127.0.0.1.evil.test
+  ---
+  duration_ms: 0.104057
+  type: 'test'
+  ...
+# Subtest: reject unsafe baseURL file:///tmp/app
+ok 5 - reject unsafe baseURL file:///tmp/app
+  ---
+  duration_ms: 0.948336
+  type: 'test'
+  ...
+# Subtest: reject unsafe baseURL ftp://127.0.0.1
+ok 6 - reject unsafe baseURL ftp://127.0.0.1
+  ---
+  duration_ms: 0.139894
+  type: 'test'
+  ...
+# Subtest: reject unsafe baseURL http://user:password@localhost
+ok 7 - reject unsafe baseURL http://user:password@localhost
+  ---
+  duration_ms: 0.181847
+  type: 'test'
+  ...
+# Subtest: explicit remote opt-in permits a named authorized origin
+ok 8 - explicit remote opt-in permits a named authorized origin
+  ---
+  duration_ms: 0.208936
+  type: 'test'
+  ...
+# Subtest: origin allowlist must include baseURL origin
+ok 9 - origin allowlist must include baseURL origin
+  ---
+  duration_ms: 0.332603
+  type: 'test'
+  ...
+# Subtest: origin entries cannot contain paths
+ok 10 - origin entries cannot contain paths
+  ---
+  duration_ms: 0.3693
+  type: 'test'
+  ...
+# Subtest: empty origin list is rejected
+ok 11 - empty origin list is rejected
+  ---
+  duration_ms: 0.322788
+  type: 'test'
+  ...
+# Subtest: loopback matching is exact and includes IPv6
+ok 12 - loopback matching is exact and includes IPv6
+  ---
+  duration_ms: 0.278709
+  type: 'test'
+  ...
+# Subtest: reject invalid repetitions 0
+ok 13 - reject invalid repetitions 0
+  ---
+  duration_ms: 0.719015
+  type: 'test'
+  ...
+# Subtest: reject invalid repetitions 1
+ok 14 - reject invalid repetitions 1
+  ---
+  duration_ms: 0.114204
+  type: 'test'
+  ...
+# Subtest: reject invalid repetitions 11
+ok 15 - reject invalid repetitions 11
+  ---
+  duration_ms: 0.067753
+  type: 'test'
+  ...
+# Subtest: reject invalid repetitions 2.5
+ok 16 - reject invalid repetitions 2.5
+  ---
+  duration_ms: 0.058821
+  type: 'test'
+  ...
+# Subtest: reject invalid repetitions NaN
+ok 17 - reject invalid repetitions NaN
+  ---
+  duration_ms: 0.054348
+  type: 'test'
+  ...
+# Subtest: reject invalid timeout 0
+ok 18 - reject invalid timeout 0
+  ---
+  duration_ms: 0.116026
+  type: 'test'
+  ...
+# Subtest: reject invalid timeout 99
+ok 19 - reject invalid timeout 99
+  ---
+  duration_ms: 0.054871
+  type: 'test'
+  ...
+# Subtest: reject invalid timeout 300001
+ok 20 - reject invalid timeout 300001
+  ---
+  duration_ms: 0.050814
+  type: 'test'
+  ...
+# Subtest: reject invalid timeout Infinity
+ok 21 - reject invalid timeout Infinity
+  ---
+  duration_ms: 0.084426
+  type: 'test'
+  ...
+# Subtest: no scenarios is not a green campaign
+ok 22 - no scenarios is not a green campaign
+  ---
+  duration_ms: 0.095489
+  type: 'test'
+  ...
+# Subtest: duplicate scenario IDs are rejected
+ok 23 - duplicate scenario IDs are rejected
+  ---
+  duration_ms: 0.092759
+  type: 'test'
+  ...
+# Subtest: duplicate mutation IDs are rejected
+ok 24 - duplicate mutation IDs are rejected
+  ---
+  duration_ms: 0.094689
+  type: 'test'
+  ...
+# Subtest: missing verification is rejected at the boundary
+ok 25 - missing verification is rejected at the boundary
+  ---
+  duration_ms: 0.443033
+  type: 'test'
+  ...
+# Subtest: mutation with missing selector is invalid, not a silent no-op
+ok 26 - mutation with missing selector is invalid, not a silent no-op
+  ---
+  duration_ms: 0.087966
+  type: 'test'
+  ...
+# Subtest: unknown operator is rejected
+ok 27 - unknown operator is rejected
+  ---
+  duration_ms: 0.098622
+  type: 'test'
+  ...
+# Subtest: network mutation with missing path is rejected
+ok 28 - network mutation with missing path is rejected
+  ---
+  duration_ms: 0.064585
+  type: 'test'
+  ...
+# Subtest: reject ambiguous network path cart
+ok 29 - reject ambiguous network path cart
+  ---
+  duration_ms: 0.069427
+  type: 'test'
+  ...
+# Subtest: reject ambiguous network path //evil.test
+ok 30 - reject ambiguous network path //evil.test
+  ---
+  duration_ms: 0.051003
+  type: 'test'
+  ...
+# Subtest: reject ambiguous network path /cart?token=x
+ok 31 - reject ambiguous network path /cart?token=x
+  ---
+  duration_ms: 0.088854
+  type: 'test'
+  ...
+# Subtest: reject ambiguous network path /cart\#x
+ok 32 - reject ambiguous network path /cart\#x
+  ---
+  duration_ms: 0.073521
+  type: 'test'
+  ...
+# Subtest: reject ambiguous network path /cart*
+ok 33 - reject ambiguous network path /cart*
+  ---
+  duration_ms: 0.047486
+  type: 'test'
+  ...
+# Subtest: 204 cannot contain a body
+ok 34 - 204 cannot contain a body
+  ---
+  duration_ms: 0.090638
+  type: 'test'
+  ...
+# Subtest: network method is matched, query is deliberately ignored
+ok 35 - network method is matched, query is deliberately ignored
+  ---
+  duration_ms: 0.116119
+  type: 'test'
+  ...
+# Subtest: baseline requires repeated clean success with zero injection hits
+ok 36 - baseline requires repeated clean success with zero injection hits
+  ---
+  duration_ms: 0.161062
+  type: 'test'
+  ...
+# Subtest: baseline failures invalidate even apparent detections
+ok 37 - baseline failures invalidate even apparent detections
+  ---
+  duration_ms: 0.324505
+  type: 'test'
+  ...
+# Subtest: a single repetition never establishes a survivor
+ok 38 - a single repetition never establishes a survivor
+  ---
+  duration_ms: 0.084859
+  type: 'test'
+  ...
+# Subtest: applied fault plus repeated passed verification is a survivor
+ok 39 - applied fault plus repeated passed verification is a survivor
+  ---
+  duration_ms: 0.105916
+  type: 'test'
+  ...
+# Subtest: consistent verify assertions after hits are detections
+ok 40 - consistent verify assertions after hits are detections
+  ---
+  duration_ms: 0.065112
+  type: 'test'
+  ...
+# Subtest: zero hits are unexercised, never killed or survived
+ok 41 - zero hits are unexercised, never killed or survived
+  ---
+  duration_ms: 0.096825
+  type: 'test'
+  ...
+# Subtest: a timeout is not a detection
+ok 42 - a timeout is not a detection
+  ---
+  duration_ms: 0.0678
+  type: 'test'
+  ...
+# Subtest: infrastructure errors do not count as kills
+ok 43 - infrastructure errors do not count as kills
+  ---
+  duration_ms: 0.050559
+  type: 'test'
+  ...
+# Subtest: injector errors invalidate observed hits
+ok 44 - injector errors invalidate observed hits
+  ---
+  duration_ms: 0.064369
+  type: 'test'
+  ...
+# Subtest: blocked unapproved traffic invalidates the experiment
+ok 45 - blocked unapproved traffic invalidates the experiment
+  ---
+  duration_ms: 0.08263
+  type: 'test'
+  ...
+# Subtest: mixed verification outcomes are unstable
+ok 46 - mixed verification outcomes are unstable
+  ---
+  duration_ms: 0.063141
+  type: 'test'
+  ...
+# Subtest: mixed fault activation is unstable
+ok 47 - mixed fault activation is unstable
+  ---
+  duration_ms: 0.079875
+  type: 'test'
+  ...
+# Subtest: zero denominator is null, never 100%
+ok 48 - zero denominator is null, never 100%
+  ---
+  duration_ms: 0.217755
+  type: 'test'
+  ...
+# Subtest: unresolved faults never improve a score
+ok 49 - unresolved faults never improve a score
+  ---
+  duration_ms: 0.0896
+  type: 'test'
+  ...
+# Subtest: all detected yields exit 0
+ok 50 - all detected yields exit 0
+  ---
+  duration_ms: 0.060616
+  type: 'test'
+  ...
+# Subtest: stable survivors yield exit 1
+ok 51 - stable survivors yield exit 1
+  ---
+  duration_ms: 0.053689
+  type: 'test'
+  ...
+# Subtest: empty campaigns cannot succeed
+ok 52 - empty campaigns cannot succeed
+  ---
+  duration_ms: 0.047377
+  type: 'test'
+  ...
+# Subtest: check creates a native assertion error
+ok 53 - check creates a native assertion error
+  ---
+  duration_ms: 1.172911
+  type: 'test'
+  ...
+# Subtest: eventually retries a predicate until success
+ok 54 - eventually retries a predicate until success
+  ---
+  duration_ms: 17.449165
+  type: 'test'
+  ...
+# Subtest: eventually expiry is an assertion, not a journey timeout
+ok 55 - eventually expiry is an assertion, not a journey timeout
+  ---
+  duration_ms: 10.649677
+  type: 'test'
+  ...
+# Subtest: eventually propagates predicate errors as non-assertions
+ok 56 - eventually propagates predicate errors as non-assertions
+  ---
+  duration_ms: 0.225582
+  type: 'test'
+  ...
+# Subtest: eventually honors cancellation
+ok 57 - eventually honors cancellation
+  ---
+  duration_ms: 0.194337
+  type: 'test'
+  ...
+# Subtest: eventually rejects invalid timing
+ok 58 - eventually rejects invalid timing
+  ---
+  duration_ms: 0.087161
+  type: 'test'
+  ...
+# Subtest: HTML escapes all unsafe characters
+ok 59 - HTML escapes all unsafe characters
+  ---
+  duration_ms: 0.126578
+  type: 'test'
+  ...
+# Subtest: HTML report cannot embed user titles as markup
+ok 60 - HTML report cannot embed user titles as markup
+  ---
+  duration_ms: 0.50651
+  type: 'test'
+  ...
+# Subtest: HTML report is standalone and shows eligibility
+ok 61 - HTML report is standalone and shows eligibility
+  ---
+  duration_ms: 0.101873
+  type: 'test'
+  ...
+# Subtest: Markdown report contains evidence and a bounded claim
+ok 62 - Markdown report contains evidence and a bounded claim
+  ---
+  duration_ms: 0.286979
+  type: 'test'
+  ...
+# false-green: Missing --suite. Run false-green --help.
+# false-green: Unknown option '--silent-success'
+# false-green 0.1.0-alpha.1
+# Break the product. Challenge the green.
+# Usage: false-green --suite ./false-green.suite.mjs [options]
+#   --suite PATH          Trusted JavaScript ESM suite (required).
+#   --out PATH            Report directory (default false-green-report).
+#   --scenario ID         Run one scenario by exact id.
+#   --headed              Show Chromium.
+#   --version             Print version.
+#   --help                Print this help.
+# Environment: FALSE_GREEN_CHROMIUM_PATH for an installed Chromium executable.
+# Exit codes: 0 all detected; 1 stable survivors; 2 invalid/incomplete/error.
+# This executes trusted local code. Use disposable, authorized targets only.
+# 0.1.0-alpha.1
+# Subtest: JSON, HTML and Markdown reports round-trip on disk
+ok 63 - JSON, HTML and Markdown reports round-trip on disk
+  ---
+  duration_ms: 5.3674
+  type: 'test'
+  ...
+# Subtest: CLI missing suite returns 2
+ok 64 - CLI missing suite returns 2
+  ---
+  duration_ms: 0.898288
+  type: 'test'
+  ...
+# Subtest: CLI rejects unknown flags
+ok 65 - CLI rejects unknown flags
+  ---
+  duration_ms: 0.442362
+  type: 'test'
+  ...
+# Subtest: CLI help returns 0 without launching a browser
+ok 66 - CLI help returns 0 without launching a browser
+  ---
+  duration_ms: 0.214866
+  type: 'test'
+  ...
+# Subtest: CLI version returns 0 without launching a browser
+ok 67 - CLI version returns 0 without launching a browser
+  ---
+  duration_ms: 0.100306
+  type: 'test'
+  ...
+# Subtest: offline HTML fixtures permit about:blank and no network origins
+ok 68 - offline HTML fixtures permit about:blank and no network origins
+  ---
+  duration_ms: 0.128727
+  type: 'test'
+  ...
+# Subtest: offline fixture cannot enable an HTTP origin
+ok 69 - offline fixture cannot enable an HTTP origin
+  ---
+  duration_ms: 0.083556
+  type: 'test'
+  ...
+# Subtest: offline fixture rejects URL-path network faults
+ok 70 - offline fixture rejects URL-path network faults
+  ---
+  duration_ms: 0.170057
+  type: 'test'
+  ...
+# Subtest: image operator needs exactly one selector or path
+ok 71 - image operator needs exactly one selector or path
+  ---
+  duration_ms: 0.155051
+  type: 'test'
+  ...
+1..71
+# tests 71
+# suites 0
+# pass 71
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 472.126031
+
+> false-green@0.1.0-alpha.1 test:browser
+> tsc -p tsconfig.test.json && node --test .test-build/tests/browser.test.js
+
+TAP version 13
+# Subtest: healthy control really changes the UI
+ok 1 - healthy control really changes the UI
+  ---
+  duration_ms: 943.145417
+  type: 'test'
+  ...
+# Subtest: click fault suppresses the real handler and records a hit
+ok 2 - click fault suppresses the real handler and records a hit
+  ---
+  duration_ms: 342.057398
+  type: 'test'
+  ...
+# Subtest: a nonexistent click selector does not fabricate evidence
+ok 3 - a nonexistent click selector does not fabricate evidence
+  ---
+  duration_ms: 291.79976
+  type: 'test'
+  ...
+# Subtest: replace-text changes a real DOM node
+ok 4 - replace-text changes a real DOM node
+  ---
+  duration_ms: 192.251904
+  type: 'test'
+  ...
+# Subtest: equivalent text replacement is not a hit
+ok 5 - equivalent text replacement is not a hit
+  ---
+  duration_ms: 138.172598
+  type: 'test'
+  ...
+# Subtest: DOM faults also apply to dynamically inserted nodes
+ok 6 - DOM faults also apply to dynamically inserted nodes
+  ---
+  duration_ms: 213.064716
+  type: 'test'
+  ...
+# Subtest: hide-element preserves existence but removes visibility
+ok 7 - hide-element preserves existence but removes visibility
+  ---
+  duration_ms: 197.895868
+  type: 'test'
+  ...
+# Subtest: remove-attribute records only an actual removal
+ok 8 - remove-attribute records only an actual removal
+  ---
+  duration_ms: 155.744004
+  type: 'test'
+  ...
+# Subtest: invalid CSS selector produces injector error, not a silent pass
+ok 9 - invalid CSS selector produces injector error, not a silent pass
+  ---
+  duration_ms: 145.625896
+  type: 'test'
+  ...
+# Subtest: broken image is complete but contains zero decoded pixels
+ok 10 - broken image is complete but contains zero decoded pixels
+  ---
+  duration_ms: 241.72946
+  type: 'test'
+  ...
+# Subtest: runner reproduces a survivor with clean controls before and after
+ok 11 - runner reproduces a survivor with clean controls before and after
+  ---
+  duration_ms: 1490.885681
+  type: 'test'
+  ...
+# Subtest: runner detects a broken behavior with the same healthy journey
+ok 12 - runner detects a broken behavior with the same healthy journey
+  ---
+  duration_ms: 1511.941513
+  type: 'test'
+  ...
+# Subtest: broken baseline prevents mutation execution
+ok 13 - broken baseline prevents mutation execution
+  ---
+  duration_ms: 764.335624
+  type: 'test'
+  ...
+# Subtest: post-control failure invalidates an apparently successful campaign
+ok 14 - post-control failure invalidates an apparently successful campaign
+  ---
+  duration_ms: 1485.274966
+  type: 'test'
+  ...
+# Subtest: reset is called for every trial, including four clean controls
+ok 15 - reset is called for every trial, including four clean controls
+  ---
+  duration_ms: 1443.308224
+  type: 'test'
+  ...
+# Subtest: assertions inside exercise are not credited as verification detections
+ok 16 - assertions inside exercise are not credited as verification detections
+  ---
+  duration_ms: 1444.50188
+  type: 'test'
+  ...
+# Subtest: full campaign distinguishes never-applied mutations from survivors
+ok 17 - full campaign distinguishes never-applied mutations from survivors
+  ---
+  duration_ms: 1412.484244
+  type: 'test'
+  ...
+# Subtest: repeated timeout after activation is inconclusive, not a kill
+ok 18 - repeated timeout after activation is inconclusive, not a kill
+  ---
+  duration_ms: 3917.547149
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16988.93294
+
+> false-green@0.1.0-alpha.1 demo
+> npm run build && node scripts/demo.mjs
+
+
+> false-green@0.1.0-alpha.1 build
+> tsc -p tsconfig.json
+
+weak-checkout: clean controls (2)
+weak-checkout / dead-checkout: applying fault (2)
+weak-checkout / broken-image: applying fault (2)
+weak-checkout / hidden-shipping: applying fault (2)
+weak-checkout / wrong-confirmation: applying fault (2)
+weak-checkout / missing-accessible-name: applying fault (2)
+weak-checkout: post-mutation clean controls (2)
+strong-checkout: clean controls (2)
+strong-checkout / dead-checkout: applying fault (2)
+strong-checkout / broken-image: applying fault (2)
+strong-checkout / hidden-shipping: applying fault (2)
+strong-checkout / wrong-confirmation: applying fault (2)
+strong-checkout / missing-accessible-name: applying fault (2)
+strong-checkout: post-mutation clean controls (2)
+
+# false-green · One checkout. Two very different test suites.
+
+5 detected · 5 survived · 0 not exercised · 0 unresolved
+
+Detection rate: 50% (10/10 eligible). Exit code: 1.
+
+| Scenario | Fault | Verdict | Hits per repetition |
+|---|---|---|---|
+| weak-checkout | dead-checkout | survived | 1, 1 |
+| weak-checkout | broken-image | survived | 1, 1 |
+| weak-checkout | hidden-shipping | survived | 1, 1 |
+| weak-checkout | wrong-confirmation | survived | 1, 1 |
+| weak-checkout | missing-accessible-name | survived | 1, 1 |
+| strong-checkout | dead-checkout | detected | 1, 1 |
+| strong-checkout | broken-image | detected | 1, 1 |
+| strong-checkout | hidden-shipping | detected | 1, 1 |
+| strong-checkout | wrong-confirmation | detected | 1, 1 |
+| strong-checkout | missing-accessible-name | detected | 1, 1 |
+
+A detected fault is not proof of product correctness. A survivor needs review for relevance or equivalent behavior. Unexercised and unresolved results never improve the score.
+
+DEMO VERIFIED: 5 stable false greens, 5 detections, all clean controls passed.
+Open false-green-report/index.html for the evidence report.

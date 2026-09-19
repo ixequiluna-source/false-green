@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 1,
+  "toolVersion": "0.1.0-alpha.1",
+  "suite": "One checkout. Two very different test suites.",
+  "createdAt": "2026-09-18T07:25:39.567Z",
+  "durationMs": 7903,
+  "environment": {
+    "node": "v22.16.0",
+    "platform": "linux",
+    "browser": "144.0.7559.96",
+    "playwright": "1.57.0-beta-1764944708000"
+  },
+  "repetitions": 2,
+  "suiteFileSha256": null,
+  "scenarios": [
+    {
+      "id": "weak-checkout",
+      "title": "Weak checks: everything is still green",
+      "baselineBefore": [
+        {
+          "outcome": "passed",
+          "phase": "complete",
+          "hits": 0,
+          "durationMs": 322,
+          "message": null,
+          "blockedRequests": 0,
+          "injectionErrors": []
+        },
+        {
+          "outcome": "passed",
+          "phase": "complete",
+          "hits": 0,
+          "durationMs": 239,
+          "message": null,
+          "blockedRequests": 0,
+          "injectionErrors": []
+        }
+      ],
+      "baselineAfter": [
+        {
+          "outcome": "passed",
+          "phase": "complete",
+          "hits": 0,
+          "durationMs": 238,
+          "message": null,
+          "blockedRequests": 0,
+          "injectionErrors": []
+        },
+        {
+          "outcome": "passed",
+          "phase": "complete",
+          "hits": 0,
+          "durationMs": 246,
+          "message": null,
+          "blockedRequests": 0,
+          "injectionErrors": []
+        }
+      ],
+      "baselineValid": true,
+      "mutations": [
+        {
+          "id": "dead-checkout",
+          "title": "Checkout button does nothing",
+          "kind": "block-click",
+          "trials": [
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 235,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 229,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "survived",
+          "reason": "The fault applied in every repetition; all verification checks still passed. Review the test and fault relevance."
+        },
+        {
+          "id": "broken-image",
+          "title": "Product image cannot decode",
+          "kind": "break-image",
+          "trials": [
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 249,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 235,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "survived",
+          "reason": "The fault applied in every repetition; all verification checks still passed. Review the test and fault relevance."
+        },
+        {
+          "id": "hidden-shipping",
+          "title": "Shipping information is invisible",
+          "kind": "hide-element",
+          "trials": [
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 240,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 233,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "survived",
+          "reason": "The fault applied in every repetition; all verification checks still passed. Review the test and fault relevance."
+        },
+        {
+          "id": "wrong-confirmation",
+          "title": "Confirmation copy is corrupted",
+          "kind": "replace-text",
+          "trials": [
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 224,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 260,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "survived",
+          "reason": "The fault applied in every repetition; all verification checks still passed. Review the test and fault relevance."
+        },
+        {
+          "id": "missing-accessible-name",
+          "title": "Explicit button label is removed",
+          "kind": "remove-attribute",
+          "trials": [
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 225,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "passed",
+              "phase": "complete",
+              "hits": 1,
+              "durationMs": 241,
+              "message": null,
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "survived",
+          "reason": "The fault applied in every repetition; all verification checks still passed. Review the test and fault relevance."
+        }
+      ]
+    },
+    {
+      "id": "strong-checkout",
+      "title": "Behavior checks: the same faults are detected",
+      "baselineBefore": [
+        {
+          "outcome": "passed",
+          "phase": "complete",
+          "hits": 0,
+          "durationMs": 283,
+          "message": null,
+          "blockedRequests": 0,
+          "injectionErrors": []
+        },
+        {
+          "outcome": "passed",
+          "phase": "complete",
+          "hits": 0,
+          "durationMs": 227,
+          "message": null,
+          "blockedRequests": 0,
+          "injectionErrors": []
+        }
+      ],
+      "baselineAfter": [
+        {
+          "outcome": "passed",
+          "phase": "complete",
+          "hits": 0,
+          "durationMs": 244,
+          "message": null,
+          "blockedRequests": 0,
+          "injectionErrors": []
+        },
+        {
+          "outcome": "passed",
+          "phase": "complete",
+          "hits": 0,
+          "durationMs": 239,
+          "message": null,
+          "blockedRequests": 0,
+          "injectionErrors": []
+        }
+      ],
+      "baselineValid": true,
+      "mutations": [
+        {
+          "id": "dead-checkout",
+          "title": "Checkout button does nothing",
+          "kind": "block-click",
+          "trials": [
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 656,
+              "message": "AssertionError: Checkout must show a confirmation",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 656,
+              "message": "AssertionError: Checkout must show a confirmation",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "detected",
+          "reason": "An assertion failed during verification after the fault applied in every repetition."
+        },
+        {
+          "id": "broken-image",
+          "title": "Product image cannot decode",
+          "kind": "break-image",
+          "trials": [
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 254,
+              "message": "AssertionError: Product image must contain decoded pixels",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 263,
+              "message": "AssertionError: Product image must contain decoded pixels",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "detected",
+          "reason": "An assertion failed during verification after the fault applied in every repetition."
+        },
+        {
+          "id": "hidden-shipping",
+          "title": "Shipping information is invisible",
+          "kind": "hide-element",
+          "trials": [
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 264,
+              "message": "AssertionError: Shipping information must remain visible",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 264,
+              "message": "AssertionError: Shipping information must remain visible",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "detected",
+          "reason": "An assertion failed during verification after the fault applied in every repetition."
+        },
+        {
+          "id": "wrong-confirmation",
+          "title": "Confirmation copy is corrupted",
+          "kind": "replace-text",
+          "trials": [
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 212,
+              "message": "AssertionError: Confirmation must communicate success",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 188,
+              "message": "AssertionError: Confirmation must communicate success",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "detected",
+          "reason": "An assertion failed during verification after the fault applied in every repetition."
+        },
+        {
+          "id": "missing-accessible-name",
+          "title": "Explicit button label is removed",
+          "kind": "remove-attribute",
+          "trials": [
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 237,
+              "message": "AssertionError: Explicit accessible label must match the product contract",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            },
+            {
+              "outcome": "assertion-failed",
+              "phase": "verify",
+              "hits": 1,
+              "durationMs": 242,
+              "message": "AssertionError: Explicit accessible label must match the product contract",
+              "blockedRequests": 0,
+              "injectionErrors": []
+            }
+          ],
+          "verdict": "detected",
+          "reason": "An assertion failed during verification after the fault applied in every repetition."
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "detected": 5,
+    "survived": 5,
+    "unexercised": 0,
+    "unresolved": 0,
+    "eligible": 10,
+    "detectionRate": 50,
+    "exitCode": 1
+  }
+}
